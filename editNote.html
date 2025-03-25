@@ -14,12 +14,11 @@
         <div class="note-block">
             <div class="note-element">
                 <label>Titre</label>
-                <input type="text">
+                <input type="text" id="noteTitle">
             </div>
 
             <div class="note-element">
                 <label for="types">Choisissez un type:</label>
-
                 <select name="type" id="types">
                     <option value="classique">Classique</option>
                     <option value="checklist">Checklist</option>
@@ -28,14 +27,41 @@
 
             <div class="note-element">
                 <label>Couleur de fond</label>
-                <input type="color">
+                <input type="color" id="noteColor">
             </div>
+            
             <div class="note-element">
-                <label>Contenue</label>
-                <textarea></textarea>
+                <label>Contenu</label>
+                <textarea id="noteContent"></textarea>
             </div>
+
+            <button id="saveButton">Enregistrer</button>
         </div>
     </div>
+
+    <script>
+        // Fonction pour obtenir les paramètres de l'URL
+        function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split("&").forEach(param => {
+                const [key, value] = param.split("=");
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
+    
+        const queryParams = getQueryParams();
+        const title = queryParams.title || '';
+        const content = queryParams.content || '';
+        const color = queryParams.color || '';
+    
+        // Maintenant, vous pouvez utiliser `title` et `content` pour initialiser vos champs
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("noteTitle").value = title;
+            document.getElementById("noteContent").value = content;
+            document.getElementById("noteColor").value = color;
+        });
+    </script>
 </body>
 
 </html>

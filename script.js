@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function createNoteElement(title, content) {
         const noteBlock = document.createElement('div');
         noteBlock.classList.add('notes-block');
+        const noteBlockColor = "#DDDDDD"
+        noteBlock.style.backgroundColor = noteBlockColor
 
         const titleElement = document.createElement('div');
         titleElement.classList.add('notes-block-text');
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const editButton = document.createElement('button');
         editButton.classList.add('button');
         editButton.innerText = 'Edit';
-        editButton.addEventListener('click', () => editNoteContent(titleElement, contentElement));
+        editButton.addEventListener('click', () => editNoteContent(titleElement, contentElement, noteBlockColor));
         buttonContainer.appendChild(editButton);
 
         const labelButton = document.createElement('button');
@@ -62,10 +64,11 @@ document.addEventListener("DOMContentLoaded", function () {
         noteBlock.remove();
     }
 
-    function editNoteContent(titleElement, contentElement) {
+    function editNoteContent(titleElement, contentElement, noteBlockColor) {
         const originalTitle = titleElement.innerText;
         const originalContent = contentElement.innerText;
+        const originalColor = noteBlockColor;
 
-        window.location.href = `./editNote.html?title=${encodeURIComponent(originalTitle)}&content=${encodeURIComponent(originalContent)}`;
+        window.location.href = `./editNote.html?title=${encodeURIComponent(originalTitle)}&content=${encodeURIComponent(originalContent)}&color=${encodeURIComponent(originalColor)}`;
     }
 });
