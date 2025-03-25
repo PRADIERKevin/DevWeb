@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fr">
 <head>
-    <link rel="stylesheet" href="./style.css">
-    <script src="./script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
 </head>
-
 <body>
     <div class="container">
         <div class="notes-header">
-            <strong class="notes-header-text">Notes Manager</strong>
+            <a href="index.html" class="nav-link">📋 Notes</a>
+            <a href="editTag.html" class="nav-link">🏷️ Tags</a>
+        </div>        
+        
+        <div class="controls">
+            <button id="add-button">Créer une nouvelle note</button>
+            <input type="text" id="search" placeholder="Rechercher des notes...">
         </div>
-        <div>
-            <button id="add-button">Create new task</span>
-        </div>
-        <div>
-            <input type="text" placeholder="Search..">
-        </div>
-        <div class="notes-board">
-
-        </div>
+        
+        <div class="notes-board"></div>
     </div>
 </body>
-
 </html>

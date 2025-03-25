@@ -1,74 +1,106 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const addButton = document.getElementById('add-button');
-    const notesBoard = document.querySelector('.notes-board');
-    let notes = JSON.parse(localStorage.getItem('notes')) || [];
+document.addEventListener("DOMContentLoaded", () => {
+    const addButton = document.getElementById("add-button");
+    const notesBoard = document.querySelector(".notes-board");
+    const searchInput = document.getElementById("search");
+    let notes = JSON.parse(localStorage.getItem("notes")) || [];
+    let tags = JSON.parse(localStorage.getItem("tags")) || [];
 
-    // Chargement des notes depuis le localStorage
-    notes.forEach(note => {
-        const noteElement = createNoteElement(note.title, note.content);
-        notesBoard.appendChild(noteElement);
-    });
+    function renderNotes(filteredNotes = notes) {
+        notesBoard.innerHTML = "";
+        filteredNotes.forEach(note => {
+            notesBoard.appendChild(createNoteElement(note));
+        });
+    }
 
-    addButton.addEventListener('click', function () {
-        const newNote = { title: `New Note ${notes.length}`, content: "This is a new note." };
-        notes.push(newNote);
-        localStorage.setItem('notes', JSON.stringify(notes));
-        
-        const noteElement = createNoteElement(newNote.title, newNote.content);
-        notesBoard.appendChild(noteElement);
-    });
+    function createNoteElement({ title, content, color = "#DDDDDD", tags = [] }) {
+        const noteBlock = document.createElement("div");
+        noteBlock.classList.add("notes-block");
+        noteBlock.style.backgroundColor = color;
 
-    function createNoteElement(title, content) {
-        const noteBlock = document.createElement('div');
-        noteBlock.classList.add('notes-block');
-        const noteBlockColor = "#DDDDDD"
-        noteBlock.style.backgroundColor = noteBlockColor
+        noteBlock.innerHTML = `
+            <div class="notes-block-text"><strong>${title}</strong></div>
+            <div class="task"><span>${content}</span></div>
+            <div class="note-tags">${tags.map(tag => `<span class="note-tag" style="background-color: ${getTagColor(tag)}">${tag}</span>`).join(" ")}</div>
+            <div class="notes-button">
+                <button class="edit-button">Modifier</button>
+                <button class="label-button">Ajouter un tag</button>
+                <button class="remove-button">Supprimer</button>
+            </div>
+        `;
 
-        const titleElement = document.createElement('div');
-        titleElement.classList.add('notes-block-text');
-        titleElement.innerHTML = `<strong>${title}</strong>`;
-        noteBlock.appendChild(titleElement);
+        noteBlock.querySelector(".edit-button").addEventListener("click", () => editNote(title, content, color, tags));
+        noteBlock.querySelector(".remove-button").addEventListener("click", () => removeNote(title));
+        noteBlock.querySelector(".label-button").addEventListener("click", () => openTagPopup(title));
 
-        const contentElement = document.createElement('div');
-        contentElement.classList.add('task');
-        contentElement.innerHTML = `<span>${content}</span>`;
-        noteBlock.appendChild(contentElement);
-
-        const buttonContainer = document.createElement('div');
-        buttonContainer.classList.add('notes-button');
-
-        const editButton = document.createElement('button');
-        editButton.classList.add('button');
-        editButton.innerText = 'Edit';
-        editButton.addEventListener('click', () => editNoteContent(titleElement, contentElement, noteBlockColor));
-        buttonContainer.appendChild(editButton);
-
-        const labelButton = document.createElement('button');
-        labelButton.classList.add('button');
-        labelButton.innerText = 'Add label';
-        buttonContainer.appendChild(labelButton);
-
-        const removeButton = document.createElement('button');
-        removeButton.classList.add('button');
-        removeButton.innerText = 'Remove';
-        removeButton.onclick = () => removeNote(noteBlock, title);
-        buttonContainer.appendChild(removeButton);
-
-        noteBlock.appendChild(buttonContainer);
         return noteBlock;
     }
 
-    function removeNote(noteBlock, title) {
+    function getTagColor(tagTitle) {
+        const tag = tags.find(t => t.title === tagTitle);
+        return tag ? tag.color : "#ccc";
+    }
+
+    function addNote() {
+        const newNote = { title: `Nouvelle Note ${notes.length + 1}`, content: "Ceci est une nouvelle note.", color: "#DDDDDD", tags: [] };
+        notes.push(newNote);
+        localStorage.setItem("notes", JSON.stringify(notes));
+        renderNotes();
+    }
+
+    function removeNote(title) {
         notes = notes.filter(note => note.title !== title);
-        localStorage.setItem('notes', JSON.stringify(notes));
-        noteBlock.remove();
+        localStorage.setItem("notes", JSON.stringify(notes));
+        renderNotes();
     }
 
-    function editNoteContent(titleElement, contentElement, noteBlockColor) {
-        const originalTitle = titleElement.innerText;
-        const originalContent = contentElement.innerText;
-        const originalColor = noteBlockColor;
+    function editNote(title, content, color, tags) {
+        window.location.href = `editNote.html?title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&color=${encodeURIComponent(color)}&tags=${encodeURIComponent(JSON.stringify(tags))}`;
+    }    
 
-        window.location.href = `./editNote.html?title=${encodeURIComponent(originalTitle)}&content=${encodeURIComponent(originalContent)}&color=${encodeURIComponent(originalColor)}`;
+    function openTagPopup(noteTitle) {
+        let existingPopup = document.querySelector(".popup");
+        if (existingPopup) existingPopup.remove(); // Supprime l'ancienne popup si elle existe
+
+        const tagPopup = document.createElement("div");
+        tagPopup.classList.add("popup");
+
+        tagPopup.innerHTML = `
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <h3>Choisissez un tag :</h3>
+                <div id="popupTagList">${tags.map(tag => `
+                    <div class="tag-item">
+                        <input type="checkbox" value="${tag.title}" ${notes.find(n => n.title === noteTitle)?.tags.includes(tag.title) ? "checked" : ""}>
+                        <label style="background-color: ${tag.color}">${tag.title}</label>
+                    </div>
+                `).join("")}</div>
+                <button id="validateTags">Valider</button>
+            </div>
+        `;
+
+        document.body.appendChild(tagPopup);
+
+        // Gérer la fermeture de la popup
+        tagPopup.querySelector(".close").addEventListener("click", () => tagPopup.remove());
+
+        // Validation des tags sélectionnés
+        tagPopup.querySelector("#validateTags").addEventListener("click", () => {
+            const selectedTags = Array.from(tagPopup.querySelectorAll("input:checked")).map(input => input.value);
+            const noteIndex = notes.findIndex(n => n.title === noteTitle);
+            if (noteIndex > -1) {
+                notes[noteIndex].tags = selectedTags;
+                localStorage.setItem("notes", JSON.stringify(notes));
+                renderNotes();
+            }
+            tagPopup.remove();
+        });
     }
+
+    searchInput.addEventListener("input", () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        renderNotes(notes.filter(note => note.title.toLowerCase().includes(searchTerm)));
+    });
+
+    addButton.addEventListener("click", addNote);
+    renderNotes();
 });
