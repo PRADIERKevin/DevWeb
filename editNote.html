@@ -9,13 +9,23 @@
 <body>
     <div class="container">
         <div class="notes-header">
-            <strong class="notes-header-text">Notes Manager</strong>
+            <strong class="notes-header-text">Notes Edit</strong>
         </div>
         <div class="note-block">
             <div class="note-element">
                 <label>Titre</label>
                 <input type="text">
             </div>
+
+            <div class="note-element">
+                <label for="types">Choisissez un type:</label>
+
+                <select name="type" id="types">
+                    <option value="classique">Classique</option>
+                    <option value="checklist">Checklist</option>
+                </select>
+            </div>
+
             <div class="note-element">
                 <label>Couleur de fond</label>
                 <input type="color">
