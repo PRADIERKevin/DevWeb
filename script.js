@@ -1,11 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
     const addButton = document.getElementById('add-button');
     const notesBoard = document.querySelector('.notes-board');
-    let noteCount = 0
+    let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+    // Chargement des notes depuis le localStorage
+    notes.forEach(note => {
+        const noteElement = createNoteElement(note.title, note.content);
+        notesBoard.appendChild(noteElement);
+    });
 
     addButton.addEventListener('click', function () {
-        const newNote = createNoteElement("New Note", "This is a new note.");
-        notesBoard.appendChild(newNote);
+        const newNote = { title: `New Note ${notes.length}`, content: "This is a new note." };
+        notes.push(newNote);
+        localStorage.setItem('notes', JSON.stringify(notes));
+        
+        const noteElement = createNoteElement(newNote.title, newNote.content);
+        notesBoard.appendChild(noteElement);
     });
 
     function createNoteElement(title, content) {
@@ -39,16 +49,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const removeButton = document.createElement('button');
         removeButton.classList.add('button');
         removeButton.innerText = 'Remove';
-        removeButton.onclick = () => noteBlock.remove();
+        removeButton.onclick = () => removeNote(noteBlock, title);
         buttonContainer.appendChild(removeButton);
-
-        localStorage.setItem(noteCount,`note${noteCount}` );
-        console.log(localStorage.getItem(`${noteCount}`));
-        console.log(noteCount);
-        noteCount +=1
 
         noteBlock.appendChild(buttonContainer);
         return noteBlock;
+    }
+
+    function removeNote(noteBlock, title) {
+        notes = notes.filter(note => note.title !== title);
+        localStorage.setItem('notes', JSON.stringify(notes));
+        noteBlock.remove();
     }
 
     function editNoteContent(titleElement, contentElement) {
@@ -57,5 +68,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.location.href = `./editNote.html?title=${encodeURIComponent(originalTitle)}&content=${encodeURIComponent(originalContent)}`;
     }
-
 });
