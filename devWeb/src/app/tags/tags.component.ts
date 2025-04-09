@@ -19,6 +19,7 @@ export class TagsComponent {
   }
 
   public get Tags() : Tag[]{
+    this.tags = this.storageService.getTags();
     return this.tags;
   }
 
@@ -34,6 +35,5 @@ export class TagsComponent {
       this.storageService.addTag(tagName);
     }
   }
-
 
 }
