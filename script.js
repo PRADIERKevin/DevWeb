@@ -32,6 +32,37 @@ document.addEventListener("DOMContentLoaded", () => {
         noteBlock.querySelector(".remove-button").addEventListener("click", () => removeNote(title));
         noteBlock.querySelector(".label-button").addEventListener("click", () => openTagPopup(title));
 
+        noteBlock.setAttribute("draggable", true);
+
+        noteBlock.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", title);
+        });
+
+        noteBlock.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            noteBlock.classList.add("drag-over");
+        });
+
+        noteBlock.addEventListener("dragleave", () => {
+            noteBlock.classList.remove("drag-over");
+        });
+
+        noteBlock.addEventListener("drop", (e) => {
+            e.preventDefault();
+            noteBlock.classList.remove("drag-over");
+
+            const draggedTitle = e.dataTransfer.getData("text/plain");
+            const fromIndex = notes.findIndex(n => n.title === draggedTitle);
+            const toIndex = notes.findIndex(n => n.title === title);
+
+            if (fromIndex > -1 && toIndex > -1 && fromIndex !== toIndex) {
+                const [movedNote] = notes.splice(fromIndex, 1);
+                notes.splice(toIndex, 0, movedNote);
+                localStorage.setItem("notes", JSON.stringify(notes));
+                renderNotes();
+            }
+        });
+
         return noteBlock;
     }
 
@@ -80,10 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.body.appendChild(tagPopup);
 
-        // Gérer la fermeture de la popup
         tagPopup.querySelector(".close").addEventListener("click", () => tagPopup.remove());
 
-        // Validation des tags sélectionnés
         tagPopup.querySelector("#validateTags").addEventListener("click", () => {
             const selectedTags = Array.from(tagPopup.querySelectorAll("input:checked")).map(input => input.value);
             const noteIndex = notes.findIndex(n => n.title === noteTitle);

@@ -6,9 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let tags = JSON.parse(localStorage.getItem("tags")) || [];
 
-    // Affichage des tags existants
     function displayTags() {
-        tagsBoard.innerHTML = ""; // Nettoyer avant d'afficher
+        tagsBoard.innerHTML = "";
         tags.forEach(tag => {
             const tagElement = createTagElement(tag);
             tagsBoard.appendChild(tagElement);
@@ -49,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         tagsBoard.appendChild(createTagElement(newTag));
 
-        // Réinitialiser les champs
         tagTitleInput.value = "";
         tagColorInput.value = "#000000";
     }
@@ -62,6 +60,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addTagButton.addEventListener("click", addTag);
 
-    // Charger les tags au démarrage
     displayTags();
 });

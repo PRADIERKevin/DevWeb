@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
     contentInput.value = noteContent;
     colorInput.value = noteColor;
 
-    // Gestion de l'enregistrement de la note
     saveButton.addEventListener("click", function () {
         const updatedNote = {
             title: titleInput.value,
@@ -35,6 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Sauvegarde dans le localStorage et redirection vers la page principale
         localStorage.setItem("notes", JSON.stringify(notes));
-        window.location.href = "index.html"; // 🔥 Redirection après l'enregistrement
+        window.location.href = "index.html";
     });
 });
