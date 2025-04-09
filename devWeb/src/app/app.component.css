@@ -1,0 +1,47 @@
+  input:focus {
+    border: solid 0.2rem var(--Black);
+  }
+  
+  button:active {
+    background-color:#bebebe ;
+  }
+  
+  .container {
+    width: 100%;
+    min-width: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .notes-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: sans-serif;
+    background-color: #6200EE;
+    padding: 1rem;
+  }
+  
+  .nav-link {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  
+  .nav-link:hover {
+    background-color: #3700B3;
+  }
+  
+  
+  .notes-header-text {
+    font-size: 1.8rem;
+    color: #FFFFFF;
+    padding: 0.8rem 1.7rem;
+    border-radius: 0.5rem;
+    margin: 1rem;
+  }  
+  

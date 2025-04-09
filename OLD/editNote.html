@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier une note</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="editNote.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="notes-header">
+            <a href="index.html" class="nav-link">📋 Notes</a>
+            <a href="editTag.html" class="nav-link">🏷️ Tags</a>
+        </div>
+
+        <div class="note-block">
+            <div class="note-element">
+                <label for="noteTitle">Titre</label>
+                <input type="text" id="noteTitle">
+            </div>
+
+            <div class="note-element">
+                <label for="types">Type :</label>
+                <select id="types">
+                    <option value="classique">Classique</option>
+                    <option value="checklist">Checklist</option>
+                </select>
+            </div>
+
+            <div class="note-element">
+                <label for="noteColor">Couleur de fond</label>
+                <input type="color" id="noteColor">
+            </div>
+            
+            <div class="note-element">
+                <label for="noteContent">Contenu</label>
+                <textarea id="noteContent"></textarea>
+            </div>
+
+            <button id="saveButton">Enregistrer</button>
+        </div>
+    </div>
+</body>
+</html>

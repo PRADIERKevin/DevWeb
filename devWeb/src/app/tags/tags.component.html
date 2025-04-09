@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="note-block">
+        <div class="note-element">
+            <label for="tagTitle">Titre</label>
+            <input type="text" id="tagTitle">
+        </div>
+
+        <div class="note-element">
+            <label for="tagColor">Couleur</label>
+            <input type="color" id="tagColor">
+        </div>
+
+        <a id="addTagButton" (click)="dialogAddTag()" >Add tag</a>
+    </div>
+    <ul>
+        @for(tag of Tags; track $index) {
+        <li>{{ tag.title }}</li>
+        } @empty {
+        <li>Aucun tag !</li>
+        }
+    </ul>
+</div>
