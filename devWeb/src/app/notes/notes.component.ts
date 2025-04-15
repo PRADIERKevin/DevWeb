@@ -32,34 +32,38 @@ export class NotesComponent {
   }
 
   createNote() {
-    const newNoteCopy = { ...this.newNote, tags: [...this.newNote.tags] };
+    const newNoteCopy = {
+      ...this.newNote,
+      id: Date.now(),
+      tags: [...this.newNote.tags],
+    };
     this.notes.push(newNoteCopy);
     this.saveNotes();
     this.resetForm();
   }
-
+  
   editNote(note: Note) {
     this.editing = { ...note, tags: [...note.tags] };
   }
-
+  
   saveEdit() {
     if (!this.editing) return;
-    const index = this.notes.findIndex(n => n.title === this.editing!.title);
+    const index = this.notes.findIndex(n => n.id === this.editing!.id);
     if (index !== -1) {
       this.notes[index] = this.editing!;
       this.saveNotes();
     }
     this.editing = null;
-  }
+  }  
 
   cancelEdit() {
     this.editing = null;
   }
 
   deleteNote(note: Note) {
-    this.notes = this.notes.filter(n => n.title !== note.title);
+    this.notes = this.notes.filter(n => n.id !== note.id);
     this.saveNotes();
-  }
+  }  
 
   resetForm() {
     this.newNote = { title: '', content: '', color: '#dddddd', tags: [] };
@@ -77,4 +81,30 @@ export class NotesComponent {
     const tag = this.tags.find(t => t.title === tagTitle);
     return tag?.color || '#ccc';
   }
+
+  draggedNote: Note | null = null;
+
+  onDragStart(note: Note) {
+    this.draggedNote = note;
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(targetNote: Note) {
+    if (!this.draggedNote || this.draggedNote === targetNote) return;
+
+    const fromIndex = this.notes.findIndex(n => n === this.draggedNote);
+    const toIndex = this.notes.findIndex(n => n === targetNote);
+
+    if (fromIndex !== -1 && toIndex !== -1) {
+      const [moved] = this.notes.splice(fromIndex, 1);
+      this.notes.splice(toIndex, 0, moved);
+      this.saveNotes();
+    }
+
+    this.draggedNote = null;
+  }
+
 }

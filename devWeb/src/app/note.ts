@@ -1,6 +1,9 @@
+import { Tag } from "./tag";
+
 export interface Note {
-    title: string;
-    content: string;
-    color: string;
-    tags: string[];
-  }
+  id?: number;
+  title: string;
+  content: string;
+  color: string;
+  tags: string[];
+}

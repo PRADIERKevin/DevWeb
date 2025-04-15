@@ -1,32 +1,59 @@
-<div class="note-form">
-    <h3>Créer une note</h3>
-    <input [(ngModel)]="newNote.title" placeholder="Titre" />
-    <textarea [(ngModel)]="newNote.content" placeholder="Contenu"></textarea>
-    <input type="color" [(ngModel)]="newNote.color" />
-    <div class="tag-select">
-      <label *ngFor="let tag of tags">
-        <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(newNote, tag.title)">
-        <span [style.background]="tag.color">{{ tag.title }}</span>
+<div class="note-form note-block">
+  <h3>Créer une note</h3>
+
+  <div class="note-element">
+    <label for="title">Titre</label>
+    <input id="title" [(ngModel)]="newNote.title" />
+  </div>
+
+  <div class="note-element">
+    <label for="color">Couleur</label>
+    <input type="color" id="color" [(ngModel)]="newNote.color" />
+  </div>
+
+  <div class="note-element">
+    <label for="content">Contenu</label>
+    <textarea id="content" [(ngModel)]="newNote.content"></textarea>
+  </div>
+
+  <div class="note-element">
+    <label>Tags :</label>
+    <div class="tags-container">
+      <label *ngFor="let tag of tags" class="tag-label" [style.background]="tag.color">
+        <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(newNote, tag.title)" />
+        {{ tag.title }}
       </label>
     </div>
-    <button (click)="createNote()">Ajouter</button>
   </div>
+
+  <button class="button" (click)="createNote()">➕ Ajouter</button>
+</div>
   
   <hr />
   
-  <div class="notes-list">
-    <div class="note" *ngFor="let note of notes" [style.background]="note.color">
+  <div class="notes-board">
+    <div
+      class="notes-block"
+      *ngFor="let note of notes"
+      [style.background]="note.color"
+      draggable="true"
+      (dragstart)="onDragStart(note)"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop(note)"
+    >
       <h4>{{ note.title }}</h4>
       <p>{{ note.content }}</p>
-      <div class="tags">
-        <span *ngFor="let tag of note.tags" [style.background]="getTagColor(tag)">
+      <div class="tags-board">
+        <span *ngFor="let tag of note.tags" class="note-tag" [style.background]="getTagColor(tag)">
           {{ tag }}
         </span>
       </div>
-      <button (click)="editNote(note)">✏️</button>
-      <button (click)="deleteNote(note)">🗑️</button>
+      <div class="notes-button">
+        <button class="button" (click)="editNote(note)">✏️</button>
+        <button class="button" (click)="deleteNote(note)">🗑️</button>
+      </div>
     </div>
-  </div>
+  </div>  
   
   <form *ngIf="editing" (ngSubmit)="saveEdit()">
     <h3>Modifier une note</h3>
