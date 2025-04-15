@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tag } from './tag';
+import { Note } from './note';
 
 @Injectable({
   providedIn: 'any'
@@ -14,22 +15,27 @@ export class StorageService {
     return tags;
   }
 
-  addTag(tagName : string){
-    let tags : Tag[]= JSON.parse(localStorage.getItem("tags")!) || [] as Tag[];
-    let nb = tags.length;
-    let tag : Tag = {
-      title: tagName,
-      color: '#000000',
-      id: nb
+  addTag(title: string, color: string = "#000000") {
+    let tags: Tag[] = this.getTags();
+    const newTag: Tag = {
+      id: tags.length,
+      title,
+      color
     };
-    console.log("addTag")
-    console.log(tag)
-    const newTag = tag;
     tags.push(newTag);
-    localStorage.setItem("tags", JSON.stringify(tags));
+    this.saveTags(tags);
+  }  
 
-    let tags2 : Tag[]= JSON.parse(localStorage.getItem("tags")!) || [] as Tag[];
-    console.log("storage")
-    console.log(tags2)
+  saveTags(tags: Tag[]) {
+    localStorage.setItem("tags", JSON.stringify(tags));
   }
+  
+  getNotes(): Note[] {
+    return JSON.parse(localStorage.getItem("notes") || "[]");
+  }
+  
+  saveNotes(notes: Note[]): void {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }
+  
 }

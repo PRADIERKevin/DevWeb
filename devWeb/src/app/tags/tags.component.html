@@ -1,22 +1,37 @@
 <div class="container">
-    <div class="note-block">
-        <div class="note-element">
-            <label for="tagTitle">Titre</label>
-            <input type="text" id="tagTitle">
-        </div>
-
-        <div class="note-element">
-            <label for="tagColor">Couleur</label>
-            <input type="color" id="tagColor">
-        </div>
-
-        <a id="addTagButton" (click)="dialogAddTag()" >Add tag</a>
+  <div class="note-block">
+    <div class="note-element">
+      <label for="tagTitle">Titre</label>
+      <input type="text" id="tagTitle" [(ngModel)]="newTagTitle">
     </div>
-    <ul>
-        @for(tag of Tags; track $index) {
-        <li>{{ tag.title }}</li>
-        } @empty {
-        <li>Aucun tag !</li>
-        }
-    </ul>
+  
+    <div class="note-element">
+      <label for="tagColor">Couleur</label>
+      <input type="color" id="tagColor" [(ngModel)]="newTagColor">
+    </div>
+  
+    <a href="#" (click)="dialogAddTag(); $event.preventDefault()">Ajouter une nouvelle étiquette</a>
+    <a href="#" (click)="startEditNewTag(); $event.preventDefault()">Créer avec formulaire</a>
+  </div>
+  
+  <form *ngIf="editing" (ngSubmit)="saveTag()">
+    <label>Nom</label>
+    <input type="text" [(ngModel)]="editing.title" name="title" required />
+  
+    <label>Couleur</label>
+    <input type="color" [(ngModel)]="editing.color" name="color" />
+  
+    <button type="submit">✅ Valider</button>
+    <button type="button" (click)="cancelEdit()">❌ Annuler</button>
+  </form>
+  <ul>
+    @for(tag of Tags; track $index) {
+      <li>
+        <app-tag [id]="tag.id" [name]="tag.title" [color]="tag.color" (dblclick)="startEditTag(tag)"></app-tag>
+        <button (click)="deleteTag(tag)">🗑️</button>
+      </li>
+    } @empty {
+      <li>Aucun tag !</li>
+    }
+  </ul>
 </div>
