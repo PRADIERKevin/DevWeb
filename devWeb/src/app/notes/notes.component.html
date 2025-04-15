@@ -1,1 +1,44 @@
-<p>notes works!</p>
+<div class="note-form">
+    <h3>Créer une note</h3>
+    <input [(ngModel)]="newNote.title" placeholder="Titre" />
+    <textarea [(ngModel)]="newNote.content" placeholder="Contenu"></textarea>
+    <input type="color" [(ngModel)]="newNote.color" />
+    <div class="tag-select">
+      <label *ngFor="let tag of tags">
+        <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(newNote, tag.title)">
+        <span [style.background]="tag.color">{{ tag.title }}</span>
+      </label>
+    </div>
+    <button (click)="createNote()">Ajouter</button>
+  </div>
+  
+  <hr />
+  
+  <div class="notes-list">
+    <div class="note" *ngFor="let note of notes" [style.background]="note.color">
+      <h4>{{ note.title }}</h4>
+      <p>{{ note.content }}</p>
+      <div class="tags">
+        <span *ngFor="let tag of note.tags" [style.background]="getTagColor(tag)">
+          {{ tag }}
+        </span>
+      </div>
+      <button (click)="editNote(note)">✏️</button>
+      <button (click)="deleteNote(note)">🗑️</button>
+    </div>
+  </div>
+  
+  <form *ngIf="editing" (ngSubmit)="saveEdit()">
+    <h3>Modifier une note</h3>
+    <input [(ngModel)]="editing.title" name="editTitle" />
+    <textarea [(ngModel)]="editing.content" name="editContent"></textarea>
+    <input type="color" [(ngModel)]="editing.color" name="editColor" />
+    <div class="tag-select">
+      <label *ngFor="let tag of tags">
+        <input type="checkbox" [checked]="editing.tags.includes(tag.title)" (change)="toggleTagSelection(editing!, tag.title)">
+        <span [style.background]="tag.color">{{ tag.title }}</span>
+      </label>
+    </div>
+    <button type="submit">💾 Enregistrer</button>
+    <button type="button" (click)="cancelEdit()">❌ Annuler</button>
+  </form>  

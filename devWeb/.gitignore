@@ -32,3 +32,5 @@
 npm-debug.log
 testem.log
 /typings
+
+/.angular

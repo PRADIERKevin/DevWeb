@@ -1,0 +1,20 @@
+.note-form, .note {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 1em;
+  }
+  
+  .tags span {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin: 2px;
+    color: white;
+    font-size: 0.8em;
+  }
+  
+  .tag-select label {
+    margin-right: 10px;
+  }
+  
