@@ -3,11 +3,12 @@ import { Note } from '../note';
 import { Tag } from '../tag';
 import { StorageService } from '../storage.service';
 import { FormsModule } from '@angular/forms';
+import { NoteComponent } from '../note/note.component';
 
 @Component({
   selector: 'app-notes',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NoteComponent],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css'
 })
@@ -15,7 +16,8 @@ export class NotesComponent {
   notes: Note[] = [];
   tags: Tag[] = [];
   editing: Note | null = null;
-  newNote: Note = { title: '', content: '', color: '#dddddd', tags: [] };
+  defaultNote: Note = { title: 'Title', content: 'Content', color: '#dddddd', tags: [] };
+  draggedNote: Note | null = null;
 
   constructor(private storageService: StorageService) {
     this.loadNotes();
@@ -31,16 +33,26 @@ export class NotesComponent {
   }
 
   createNote() {
-    const newNoteCopy = {
-      ...this.newNote,
+    const newNote =
+    {
+      ...this.defaultNote,
       id: Date.now(),
-      tags: [...this.newNote.tags],
+      tags: [...this.defaultNote.tags],
     };
-    this.notes.push(newNoteCopy);
+    this.notes.push(newNote);
     this.saveNotes();
     this.resetForm();
   }
   
+  resetForm() {
+    this.defaultNote = { title: 'Title', content: 'Content', color: '#dddddd', tags: [] };
+  }
+
+  deleteNote(note: Note) {
+    this.notes = this.notes.filter(n => n.id !== note.id);
+    this.saveNotes();
+  }
+
   editNote(note: Note) {
     this.editing = { ...note, tags: [...note.tags] };
   }
@@ -59,15 +71,6 @@ export class NotesComponent {
     this.editing = null;
   }
 
-  deleteNote(note: Note) {
-    this.notes = this.notes.filter(n => n.id !== note.id);
-    this.saveNotes();
-  }  
-
-  resetForm() {
-    this.newNote = { title: '', content: '', color: '#dddddd', tags: [] };
-  }
-
   toggleTagSelection(note: Note, tagTitle: string) {
     if (note.tags.includes(tagTitle)) {
       note.tags = note.tags.filter(t => t !== tagTitle);
@@ -81,8 +84,6 @@ export class NotesComponent {
     return tag?.color || '#ccc';
   }
 
-  draggedNote: Note | null = null;
-
   onDragStart(note: Note) {
     this.draggedNote = note;
   }
@@ -92,18 +93,20 @@ export class NotesComponent {
   }
 
   onDrop(targetNote: Note) {
-    if (!this.draggedNote || this.draggedNote === targetNote) return;
-
-    const fromIndex = this.notes.findIndex(n => n === this.draggedNote);
-    const toIndex = this.notes.findIndex(n => n === targetNote);
-
-    if (fromIndex !== -1 && toIndex !== -1) {
-      const [moved] = this.notes.splice(fromIndex, 1);
-      this.notes.splice(toIndex, 0, moved);
-      this.saveNotes();
+    if (this.draggedNote || this.draggedNote !== targetNote)
+    {
+      const fromIndex = this.notes.findIndex(n => n === this.draggedNote);
+      const toIndex = this.notes.findIndex(n => n === targetNote);
+  
+      if (fromIndex !== -1 && toIndex !== -1)
+      {
+        const [moved] = this.notes.splice(fromIndex, 1);
+        this.notes.splice(toIndex, 0, moved);
+        this.saveNotes();
+      }
+  
+      this.draggedNote = null;
     }
-
-    this.draggedNote = null;
   }
 
 }

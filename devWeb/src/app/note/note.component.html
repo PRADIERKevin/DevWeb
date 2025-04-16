@@ -1,1 +1,14 @@
-<p>note works!</p>
+<h4>{{ title() }}</h4>
+<p>{{ content() }}</p>
+<a hidden="true">{{ id() }}</a>
+<div class="tags-board">
+    @for(tag of Tags; track $index)
+    {
+    <span class="note-tag" [style.color]="tag.color">
+        {{ tag.title }}
+    </span>
+    }
+    @empty{
+    <li>Aucun tag !</li>
+    }
+</div>

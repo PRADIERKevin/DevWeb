@@ -4,17 +4,17 @@
   
     <div class="note-element">
       <label for="title">Titre</label>
-      <input id="title" [(ngModel)]="newNote.title" />
+      <input id="title" [(ngModel)]="defaultNote.title" />
     </div>
   
     <div class="note-element">
       <label for="color">Couleur</label>
-      <input type="color" id="color" [(ngModel)]="newNote.color" />
+      <input type="color" id="color" [(ngModel)]="defaultNote.color" />
     </div>
   
     <div class="note-element">
       <label for="content">Contenu</label>
-      <textarea id="content" [(ngModel)]="newNote.content"></textarea>
+      <textarea id="content" [(ngModel)]="defaultNote.content"></textarea>
     </div>
   
     <div class="note-element">
@@ -22,7 +22,7 @@
       <div class="tags-container">
       @for(tag of tags; track $index) {
         <label class="tag-label" [style.background]="tag.color">
-          <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(newNote, tag.title)" />
+          <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(defaultNote, tag.title)" />
           {{ tag.title }}
         </label>
       }
@@ -36,20 +36,12 @@
     <div class="notes-board">
       @for(note of notes; track $index) {
         <div class="notes-block" [style.background]="note.color" draggable="true" (dragstart)="onDragStart(note)" (dragover)="onDragOver($event)" (drop)="onDrop(note)">
-          <h4>{{ note.title }}</h4>
-          <p>{{ note.content }}</p>
-          <div class="tags-board">
-            @for(tag of tags; track $index) {
-            <span class="note-tag" [style.color]="tag.color">
-              {{ tag }}
-            </span>
-          }
-          </div>
+          <app-note [id]="note.id" [title]="note.title" [content]="note.content"></app-note>
           <div class="notes-button">
-            <button class="button" (click)="editNote(note)">✏️</button>
-            <button class="button" (click)="deleteNote(note)">🗑️</button>
+              <button class="button" (click)="editNote(note)">✏️</button>
+              <button class="button" (click)="deleteNote(note)">🗑️</button>
           </div>
-        </div>
+      </div>
       } @empty {
         <li>Aucune note !</li>
       }
@@ -73,7 +65,7 @@
       </label>
       }
     </div>
-    <button type="submit">💾 Enregistrer</button>
-    <button type="button" (click)="cancelEdit()">❌ Annuler</button>
+    <button type="submit">Enregistrer</button>
+    <button type="button" (click)="cancelEdit()">Annuler</button>
   </form>  
 }
