@@ -1,5 +1,5 @@
 input:focus {
-    border: solid 0.2rem var(--Black);
+    border: solid 0.2rem #000000;
   }
   
   button:active {
@@ -31,4 +31,13 @@ input:focus {
     display: flex;
     flex-direction: column;
     padding: 0.5rem 0rem;
+  }
+
+  .notes-board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+    padding: 1rem;
+    font-family: sans-serif;
   }

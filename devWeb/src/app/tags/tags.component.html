@@ -27,14 +27,14 @@
     </form>
   }
 
-  <ul>
+  <div class="notes-board">
     @for(tag of tags; track $index) {
-      <li>
+      <div class="note-block">
         <app-tag [id]="tag.id" [name]="tag.title" [color]="tag.color" (dblclick)="startEditTag(tag)"></app-tag>
         <button (click)="deleteTag(tag)">🗑️</button>
-      </li>
+      </div>
     } @empty {
       <li>Aucun tag !</li>
     }
-  </ul>
+  </div>
 </div>

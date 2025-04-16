@@ -1,0 +1,14 @@
+.tag-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+}
+
+
+.tag-text {
+margin-right: 10px;
+}

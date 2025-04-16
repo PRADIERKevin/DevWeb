@@ -33,7 +33,6 @@
   </div>
   
   <div class="notes-board">
-    <div class="notes-board">
       @for(note of notes; track $index) {
         <div class="notes-block" [style.background]="note.color" draggable="true" (dragstart)="onDragStart(note)" (dragover)="onDragOver($event)" (drop)="onDrop(note)">
           <app-note [title]="note.title" [content]="note.content"></app-note>
@@ -45,7 +44,6 @@
       } @empty {
         <li>Aucune note !</li>
       }
-    </div>  
   </div>
 
 </div>
