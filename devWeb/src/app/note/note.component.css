@@ -1,0 +1,27 @@
+.note{
+    padding: 0.6rem;
+    margin: 0.2rem;
+    min-width: 14rem;
+    min-height: 4.5rem;
+    border-radius: 0.3rem;
+    border: solid 0.1rem #000000;
+}
+
+.notes-block-text {
+    font-size: 1.2rem;
+}
+
+.task {
+background-color: var(--White);
+margin: 0.2rem 0rem 0.3rem 0rem;
+border: 0.1rem solid var(--Black);
+border-radius: 0.2rem;
+padding: 0.5rem 0.2rem 0.5rem 2rem;
+}
+
+.note-tag {
+    font-size: 0.8rem;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #FFFFFF;
+}

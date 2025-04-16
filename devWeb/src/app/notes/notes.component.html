@@ -36,7 +36,7 @@
     <div class="notes-board">
       @for(note of notes; track $index) {
         <div class="notes-block" [style.background]="note.color" draggable="true" (dragstart)="onDragStart(note)" (dragover)="onDragOver($event)" (drop)="onDrop(note)">
-          <app-note [id]="note.id" [title]="note.title" [content]="note.content"></app-note>
+          <app-note [title]="note.title" [content]="note.content"></app-note>
           <div class="notes-button">
               <button class="button" (click)="editNote(note)">✏️</button>
               <button class="button" (click)="deleteNote(note)">🗑️</button>
