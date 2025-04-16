@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Tag } from '../tag';
-import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TagComponent } from '../tag/tag.component';
 
 @Component({
   selector: 'app-tags',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, TagComponent],
+  imports: [FormsModule, TagComponent],
   templateUrl: './tags.component.html',
   styleUrl: './tags.component.css'
 })
@@ -30,20 +29,21 @@ export class TagsComponent {
     return this.tags;
   }
 
-  loadTags(force = false): void {
-    if (!this.loaded || force) {
+  loadTags(): void {
+    if (!this.loaded)
+    {
       this.tags = this.storageService.getTags();
       this.loaded = true;
     }
   }
 
   dialogAddTag(): void {
-    const tagName = window.prompt("Nom du tag ?", this.newTagTitle);
-    if (tagName) {
+    if (this.newTagTitle)
+    {
       const newTag: Tag = {
         id: this.tags.length,
-        title: tagName,
-        color: this.newTagColor || '#000000'
+        title: this.newTagTitle,
+        color: this.newTagColor
       };
       this.tags.push(newTag);
       this.storageService.saveTags(this.tags);
@@ -52,27 +52,16 @@ export class TagsComponent {
     }
   }
 
-  startEditNewTag(): void {
-    this.editing = { id: 0, title: '', color: '#000000' };
-  }
-
   startEditTag(tag: Tag): void {
     this.editing = { ...tag };
   }
 
   saveTag(): void {
-    if (!this.editing) return;
-
-    if (this.editing.id === 0 && this.editing.title) {
-      this.editing.id = this.tags.length;
-      this.tags.push(this.editing);
-    } 
-    else 
+    const index = this.tags.findIndex(t => t.id === this.editing!.id);
+    if (index > -1)
     {
-      const index = this.tags.findIndex(t => t.id === this.editing!.id);
-      if (index !== -1) this.tags[index] = this.editing;
+      this.tags[index] = this.editing!;
     }
-
     this.storageService.saveTags(this.tags);
     this.editing = null;
   }

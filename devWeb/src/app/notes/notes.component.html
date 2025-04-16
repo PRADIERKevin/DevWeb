@@ -1,71 +1,79 @@
-<div class="note-form note-block">
-  <h3>Créer une note</h3>
-
-  <div class="note-element">
-    <label for="title">Titre</label>
-    <input id="title" [(ngModel)]="newNote.title" />
-  </div>
-
-  <div class="note-element">
-    <label for="color">Couleur</label>
-    <input type="color" id="color" [(ngModel)]="newNote.color" />
-  </div>
-
-  <div class="note-element">
-    <label for="content">Contenu</label>
-    <textarea id="content" [(ngModel)]="newNote.content"></textarea>
-  </div>
-
-  <div class="note-element">
-    <label>Tags :</label>
-    <div class="tags-container">
-      <label *ngFor="let tag of tags" class="tag-label" [style.background]="tag.color">
-        <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(newNote, tag.title)" />
-        {{ tag.title }}
-      </label>
-    </div>
-  </div>
-
-  <button class="button" (click)="createNote()">➕ Ajouter</button>
-</div>
+<div class="container">
+  <div class="note-form note-block controls">
+    <h3>Créer une note</h3>
   
-  <hr />
+    <div class="note-element">
+      <label for="title">Titre</label>
+      <input id="title" [(ngModel)]="newNote.title" />
+    </div>
+  
+    <div class="note-element">
+      <label for="color">Couleur</label>
+      <input type="color" id="color" [(ngModel)]="newNote.color" />
+    </div>
+  
+    <div class="note-element">
+      <label for="content">Contenu</label>
+      <textarea id="content" [(ngModel)]="newNote.content"></textarea>
+    </div>
+  
+    <div class="note-element">
+      <label>Tags :</label>
+      <div class="tags-container">
+      @for(tag of tags; track $index) {
+        <label class="tag-label" [style.background]="tag.color">
+          <input type="checkbox" [value]="tag.title" (change)="toggleTagSelection(newNote, tag.title)" />
+          {{ tag.title }}
+        </label>
+      }
+      </div>
+    </div>
+  
+    <button class="button" (click)="createNote()">Ajouter</button>
+  </div>
   
   <div class="notes-board">
-    <div
-      class="notes-block"
-      *ngFor="let note of notes"
-      [style.background]="note.color"
-      draggable="true"
-      (dragstart)="onDragStart(note)"
-      (dragover)="onDragOver($event)"
-      (drop)="onDrop(note)"
-    >
-      <h4>{{ note.title }}</h4>
-      <p>{{ note.content }}</p>
-      <div class="tags-board">
-        <span *ngFor="let tag of note.tags" class="note-tag" [style.background]="getTagColor(tag)">
-          {{ tag }}
-        </span>
-      </div>
-      <div class="notes-button">
-        <button class="button" (click)="editNote(note)">✏️</button>
-        <button class="button" (click)="deleteNote(note)">🗑️</button>
-      </div>
-    </div>
-  </div>  
-  
-  <form *ngIf="editing" (ngSubmit)="saveEdit()">
+    <div class="notes-board">
+      @for(note of notes; track $index) {
+        <div class="notes-block" [style.background]="note.color" draggable="true" (dragstart)="onDragStart(note)" (dragover)="onDragOver($event)" (drop)="onDrop(note)">
+          <h4>{{ note.title }}</h4>
+          <p>{{ note.content }}</p>
+          <div class="tags-board">
+            @for(tag of tags; track $index) {
+            <span class="note-tag" [style.color]="tag.color">
+              {{ tag }}
+            </span>
+          }
+          </div>
+          <div class="notes-button">
+            <button class="button" (click)="editNote(note)">✏️</button>
+            <button class="button" (click)="deleteNote(note)">🗑️</button>
+          </div>
+        </div>
+      } @empty {
+        <li>Aucune note !</li>
+      }
+    </div>  
+  </div>
+
+</div>
+
+@if(editing)
+{
+  <form (ngSubmit)="saveEdit()">
     <h3>Modifier une note</h3>
     <input [(ngModel)]="editing.title" name="editTitle" />
     <textarea [(ngModel)]="editing.content" name="editContent"></textarea>
     <input type="color" [(ngModel)]="editing.color" name="editColor" />
     <div class="tag-select">
-      <label *ngFor="let tag of tags">
+      @for(tag of tags; track $index) {
+      <label>
         <input type="checkbox" [checked]="editing.tags.includes(tag.title)" (change)="toggleTagSelection(editing!, tag.title)">
         <span [style.background]="tag.color">{{ tag.title }}</span>
       </label>
+      }
     </div>
     <button type="submit">💾 Enregistrer</button>
     <button type="button" (click)="cancelEdit()">❌ Annuler</button>
   </form>  
+}

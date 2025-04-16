@@ -3,12 +3,11 @@ import { Note } from '../note';
 import { Tag } from '../tag';
 import { StorageService } from '../storage.service';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-notes',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule],
+  imports: [FormsModule],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css'
 })
